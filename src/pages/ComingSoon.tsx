@@ -146,16 +146,16 @@ export function ComingSoon() {
   };
   const faqs = [{
     q: 'What is DOORDRIPP?',
-    a: "DOORDRIPP is the world's first ultra-luxury fashion delivery service. We partner with exclusive boutiques to bring high-end fashion to your doorstep instantly."
+    a: "DOORDRIPP is the world's first ultra-affordable fashion delivery service. We partner with exclusive boutiques to bring high-end fashion to your doorstep instantly."
   }, {
     q: 'When do you launch?',
-    a: 'We are currently in an exclusive beta phase in selected cities. The public launch is scheduled for late 2026. Join the waitlist to secure your spot.'
+    a: 'We are currently in an exclusive beta phase in selected cities. The public launch is scheduled for early 2026. Join the waitlist to secure your spot.'
   }, {
     q: 'What areas do you deliver to?',
     a: 'Our initial launch covers areas near Delhi-NCR . We are rapidly expanding to other fashion capitals.'
   }, {
     q: 'How fast is instant delivery?',
-    a: 'We use a dedicated fleet of secure couriers to ensure your luxury items arrive safely and swiftly, right when you need them.'
+    a: 'We use a dedicated fleet of secure couriers to ensure your affordable items arrive safely and swiftly, right when you need them.'
   }];
   const titleWords = ['Fashion', 'Delivered', 'Instantly'];
   return <div className="min-h-screen bg-black text-white selection:bg-gold selection:text-black font-sans overflow-x-hidden">
@@ -278,8 +278,8 @@ export function ComingSoon() {
           duration: 0.8,
           delay: 1
         }} className="text-lg md:text-2xl text-white/70 max-w-3xl mb-16 leading-relaxed font-light">
-            Experience the future of luxury shopping. Exclusive collections from
-            top designers, delivered to your door instantly.
+            Experience the future of affordable shopping. Exclusive collections from
+            Doordripp, delivered to your door instantly.
           </motion.p>
 
           {/* Waitlist Form */}
