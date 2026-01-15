@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { MessageCircle, ChevronDown, ArrowRight, Instagram, Twitter, Mail, Sparkles } from 'lucide-react';
 // Fashion background images (high-quality Unsplash fashion photos)
