@@ -11,7 +11,7 @@ const Logo = () => <motion.div className="relative h-12 w-auto" whileHover={{
   type: 'spring',
   stiffness: 400
 }}>
-    <img src="/image.png" alt="DOORDRIPP Logo" className="h-full w-auto object-contain" />
+    <img src="https://lh3.googleusercontent.com/d/1IKJuBkf_tFBvi6zuGtorxKltjkO1JhVf" alt="DOORDRIPP Logo" className="h-full w-auto object-contain" />
   </motion.div>;
 const GlassCard = ({
   children,
