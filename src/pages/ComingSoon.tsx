@@ -66,7 +66,7 @@ const MarqueeText = () => {
       repeat: Infinity,
       ease: 'linear'
     }} className="flex gap-8 whitespace-nowrap">
-        {[...words, ...words, ...words].map((word, i) => <span key={i} className="text-6xl md:text-8xl font-serif font-bold text-white/5">
+        {[...words, ...words, ...words].map((word, i) => <span key={i} className="text-6xl md:text-8xl font-serif font-bold text-white/20">
             {word}
           </span>)}
       </motion.div>
@@ -125,7 +125,6 @@ export function ComingSoon() {
   } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   // Rotate background images
   useEffect(() => {
     const interval = setInterval(() => {
@@ -150,10 +149,10 @@ export function ComingSoon() {
     a: "DOORDRIPP is the world's first ultra-luxury fashion delivery service. We partner with exclusive boutiques to bring high-end fashion to your doorstep instantly."
   }, {
     q: 'When do you launch?',
-    a: 'We are currently in an exclusive beta phase in select cities. The public launch is scheduled for late 2024. Join the waitlist to secure your spot.'
+    a: 'We are currently in an exclusive beta phase in selected cities. The public launch is scheduled for late 2026. Join the waitlist to secure your spot.'
   }, {
     q: 'What areas do you deliver to?',
-    a: 'Our initial launch covers Central London, Paris, and New York City. We are rapidly expanding to other fashion capitals.'
+    a: 'Our initial launch covers areas near Delhi-NCR . We are rapidly expanding to other fashion capitals.'
   }, {
     q: 'How fast is instant delivery?',
     a: 'We use a dedicated fleet of secure couriers to ensure your luxury items arrive safely and swiftly, right when you need them.'
@@ -207,14 +206,14 @@ export function ComingSoon() {
     }} transition={{
       duration: 0.8,
       ease: 'easeOut'
-    }} className="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:px-12 md:py-6 flex justify-between items-center backdrop-blur-xl bg-black/30 border-b border-white/10">
+    }} className="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:px-12 md:py-6 flex justify-center items-center backdrop-blur-xl bg-black/30 border-b border-white/10">
         <Logo />
         <motion.a href="#waitlist" whileHover={{
         scale: 1.05,
         x: 5
       }} whileTap={{
         scale: 0.95
-      }} className="hidden md:flex items-center gap-2 text-sm font-medium tracking-widest uppercase hover:text-gold transition-colors">
+      }} className="hidden md:flex items-center gap-2 text-sm font-medium tracking-widest uppercase hover:text-gold transition-colors absolute right-6 md:right-12">
           <Sparkles size={16} className="text-gold" />
           Join Waitlist
         </motion.a>
@@ -222,9 +221,7 @@ export function ComingSoon() {
 
       <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col items-center">
         {/* Hero Section */}
-        <motion.section style={{
-        opacity
-      }} className="w-full flex flex-col items-center text-center mb-24 md:mb-32">
+        <motion.section className="w-full flex flex-col items-center text-center mb-24 md:mb-32">
           <motion.div initial={{
           opacity: 0,
           scale: 0.9
@@ -339,7 +336,7 @@ export function ComingSoon() {
           duration: 0.8,
           delay: 1.4
         }} className="mt-8">
-            <motion.a href="https://wa.me/?text=I%20want%20to%20join%20DOORDRIPP%20waitlist" target="_blank" rel="noopener noreferrer" whileHover={{
+            <motion.a href="https://chat.whatsapp.com/HNtrywgb1AAHlFvBOmWMwz" target="_blank" rel="noopener noreferrer" whileHover={{
             scale: 1.05,
             x: 5
           }} className="inline-flex items-center gap-2 text-white/60 hover:text-gold transition-colors text-sm backdrop-blur-xl bg-white/5 px-6 py-3 rounded-full border border-white/10">
@@ -437,23 +434,23 @@ export function ComingSoon() {
             <div>
               &copy; {new Date().getFullYear()} DOORDRIPP. All rights reserved.
             </div>
-            <a href="mailto:contact@doordripp.com" className="hover:text-gold transition-colors flex items-center gap-2">
+            <a href="mailto:support@doordripp.com" className="hover:text-gold transition-colors flex items-center gap-2">
               <Mail size={16} />
-              contact@doordripp.com
+              support@doordripp.com
             </a>
           </div>
           <div className="flex gap-8">
             {[{
             icon: Instagram,
-            href: '#',
+            href: 'https://www.instagram.com/doordripp?igsh=MXI3MXJibjUweWx1YQ==&utm_source=ig_contact_invite',
             label: 'Instagram'
           }, {
             icon: Twitter,
-            href: '#',
+            href: 'https://x.com/doordripp?t=C3ZAb5wjDvzzHv_kq7MV9A&s=08',
             label: 'Twitter'
           }, {
             icon: MessageCircle,
-            href: 'https://wa.me/?text=I%20want%20to%20connect%20with%20DOORDRIPP',
+            href: 'https://chat.whatsapp.com/HNtrywgb1AAHlFvBOmWMwz',
             label: 'WhatsApp'
           }].map((social, i) => <motion.a key={i} href={social.href} target={social.label === 'WhatsApp' ? '_blank' : undefined} rel={social.label === 'WhatsApp' ? 'noopener noreferrer' : undefined} whileHover={{
             scale: 1.2,
