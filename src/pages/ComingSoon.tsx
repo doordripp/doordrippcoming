@@ -353,7 +353,7 @@ export function ComingSoon() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-32">
           {[{
           title: 'Curated Luxury',
-          desc: "Hand-picked items from the world's most exclusive boutiques and emerging designers.",
+          desc: "Hand-picked items from the india's trending and fashion-styled boutiques.",
           icon: '✨'
         }, {
           title: 'Instant Delivery',
