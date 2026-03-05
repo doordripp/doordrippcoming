@@ -12,20 +12,22 @@ const fashionImages = [
 // --- Components ---
 const Logo = () =>
 <motion.div
-  className="relative h-12 w-auto"
+  className="flex items-center justify-center"
   whileHover={{
-    scale: 1.05
+    scale: 1.08
   }}
   transition={{
     type: 'spring',
-    stiffness: 400
+    stiffness: 400,
+    damping: 15
   }}>
 
-    <img
-    src="/image.png"
-    alt="DOORDRIPP Logo"
-    className="h-full w-auto object-contain" />
-
+    <div className="h-14 md:h-16 w-auto">
+      <img
+      src="/image.png"
+      alt="DOORDRIPP Logo"
+      className="h-full w-auto object-contain brightness-110 contrast-110 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:drop-shadow-[0_0_30px_rgba(212,175,55,0.6)] transition-all duration-300" />
+    </div>
   </motion.div>;
 
 const GlassCard = ({
@@ -315,9 +317,11 @@ export function ComingSoon({ onNavigate }: ComingSoonProps) {
           duration: 0.8,
           ease: 'easeOut'
         }}
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:px-12 md:py-6 flex justify-between items-center backdrop-blur-xl bg-black/30 border-b border-white/10">
+        className="fixed top-0 left-0 right-0 z-50 px-6 py-5 md:px-12 md:py-6 flex justify-between items-center backdrop-blur-xl bg-black/50 border-b border-white/5">
 
-        <Logo />
+        <div className="flex-1 flex justify-center translate-x-[40px] md:translate-x-[60px]">
+          <Logo />
+        </div>
         <motion.a
           href="#waitlist"
           whileHover={{
@@ -375,48 +379,60 @@ export function ComingSoon({ onNavigate }: ComingSoonProps) {
             </motion.span>
           </motion.div>
 
-          <div className="font-serif text-5xl md:text-7xl lg:text-9xl font-bold leading-tight mb-8 overflow-hidden">
-            {titleWords.map((word, i) =>
-            <motion.div
-              key={i}
-              initial={{
-                y: 100,
-                opacity: 0
-              }}
-              animate={{
-                y: 0,
-                opacity: 1
-              }}
-              transition={{
-                duration: 0.8,
-                delay: 0.3 + i * 0.2,
-                ease: [0.22, 1, 0.36, 1]
-              }}>
-
-                {i === 2 ?
+          <div className="font-serif text-5xl md:text-7xl lg:text-9xl font-bold leading-tight mb-8">
+            <div className="flex flex-col items-center">
               <motion.span
-                className="text-gold italic inline-block"
+                initial={{
+                  y: 50,
+                  opacity: 0
+                }}
                 animate={{
-                  textShadow: [
-                  '0 0 20px rgba(212, 175, 55, 0.5)',
-                  '0 0 40px rgba(212, 175, 55, 0.8)',
-                  '0 0 20px rgba(212, 175, 55, 0.5)']
-
+                  y: 0,
+                  opacity: 1
                 }}
                 transition={{
-                  duration: 2,
-                  repeat: Infinity
-                }}>
+                  duration: 0.8,
+                  delay: 0.3
+                }}
+                className="text-white">
 
-                    {word}
-                  </motion.span> :
+                Fashion
+              </motion.span>
+              <motion.span
+                initial={{
+                  y: 50,
+                  opacity: 0
+                }}
+                animate={{
+                  y: 0,
+                  opacity: 1
+                }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.5
+                }}
+                className="text-white">
 
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/60">
-                    {word}
-                  </span>
-              }
-              </motion.div>
-            )}
+                Delivered
+              </motion.span>
+              <motion.span
+                initial={{
+                  y: 50,
+                  opacity: 0
+                }}
+                animate={{
+                  y: 0,
+                  opacity: 1
+                }}
+                transition={{
+                  duration: 0.8,
+                  delay: 0.7
+                }}
+                className="text-gold italic drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+
+                Instantly
+              </motion.span>
+            </div>
           </div>
 
           <motion.p
@@ -432,10 +448,10 @@ export function ComingSoon({ onNavigate }: ComingSoonProps) {
               duration: 0.8,
               delay: 1
             }}
-            className="text-lg md:text-2xl text-white/70 max-w-3xl mb-16 leading-relaxed font-light">
+            className="text-lg md:text-xl text-white/60 max-w-2xl mb-16 leading-relaxed font-light">
 
-            Experience the future of luxury shopping. Exclusive collections from
-            top designers, delivered to your door instantly.
+            Experience the future of affordable shopping. Exclusive collections from
+            Doordripp, delivered to your door instantly.
           </motion.p>
 
           {/* Waitlist Form */}
