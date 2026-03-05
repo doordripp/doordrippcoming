@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { ComingSoon } from './pages/ComingSoon';
 import { TermsPage } from './pages/TermsPage';
 import { PrivacyPage } from './pages/PrivacyPage';
@@ -6,37 +7,36 @@ import { AboutPage } from './pages/AboutPage';
 import { FeaturesPage } from './pages/FeaturesPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
 import { CareersPage } from './pages/CareersPage';
-type PageType =
-'home' |
-'terms' |
-'privacy' |
-'about' |
-'features' |
-'works' |
-'careers';
+
 export function App() {
-  const [currentPage, setCurrentPage] = useState<PageType>('home');
+  const navigate = useNavigate();
+
   const handleNavigate = (page: string) => {
-    setCurrentPage(page as PageType);
+    const routes: Record<string, string> = {
+      'home': '/',
+      'terms': '/terms',
+      'privacy': '/privacy-policy',
+      'about': '/about',
+      'features': '/features',
+      'works': '/how-it-works',
+      'careers': '/careers'
+    };
+    navigate(routes[page] || '/');
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   };
-  switch (currentPage) {
-    case 'terms':
-      return <TermsPage onNavigate={handleNavigate} />;
-    case 'privacy':
-      return <PrivacyPage onNavigate={handleNavigate} />;
-    case 'about':
-      return <AboutPage onNavigate={handleNavigate} />;
-    case 'features':
-      return <FeaturesPage onNavigate={handleNavigate} />;
-    case 'works':
-      return <HowItWorksPage onNavigate={handleNavigate} />;
-    case 'careers':
-      return <CareersPage onNavigate={handleNavigate} />;
-    default:
-      return <ComingSoon onNavigate={handleNavigate} />;
-  }
+
+  return (
+    <Routes>
+      <Route path="/" element={<ComingSoon onNavigate={handleNavigate} />} />
+      <Route path="/terms" element={<TermsPage onNavigate={handleNavigate} />} />
+      <Route path="/privacy-policy" element={<PrivacyPage onNavigate={handleNavigate} />} />
+      <Route path="/about" element={<AboutPage onNavigate={handleNavigate} />} />
+      <Route path="/features" element={<FeaturesPage onNavigate={handleNavigate} />} />
+      <Route path="/how-it-works" element={<HowItWorksPage onNavigate={handleNavigate} />} />
+      <Route path="/careers" element={<CareersPage onNavigate={handleNavigate} />} />
+    </Routes>
+  );
 }
