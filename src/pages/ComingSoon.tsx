@@ -180,8 +180,11 @@ export function ComingSoon({ onNavigate }: ComingSoonProps) {
             </a>
             <div className="hidden sm:flex items-center gap-2 pl-4 border-l border-white/10">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-medium">
+                COMING SOON
+              </span>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                SYS.01 // PRIVATE BETA
+                // SYS.01 BETA
               </span>
             </div>
           </div>
@@ -217,8 +220,9 @@ export function ComingSoon({ onNavigate }: ComingSoonProps) {
             transition={{ duration: 0.6 }}
             className="mb-8"
           >
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[11px] font-mono uppercase tracking-[0.25em] text-white/70">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[11px] font-mono uppercase tracking-[0.22em] text-white/75">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
+              <span className="text-[#D4AF37] font-medium border-r border-white/10 pr-2.5">COMING SOON</span>
               <span>Private Access Waitlist • Phase 01 Rolling Out</span>
             </div>
           </motion.div>
