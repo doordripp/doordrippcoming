@@ -2,30 +2,40 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-  './index.html',
-  './src/**/*.{js,ts,jsx,tsx}'
-],
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
     extend: {
       colors: {
-        gold: {
-          DEFAULT: '#D4AF37',
-          light: '#FFD700',
-          dark: '#B4941F',
+        obsidian: '#050505',
+        charcoal: {
+          DEFAULT: '#0D0D10',
+          muted: '#18181B',
+          light: '#27272A',
         },
-        black: {
-          DEFAULT: '#000000',
-          rich: '#050505',
-          glass: 'rgba(0, 0, 0, 0.8)',
-        }
+        champagne: {
+          DEFAULT: '#D4AF37',
+          light: '#E8D288',
+          pale: '#F3ECD6',
+          dark: '#9A7B1C',
+        },
+        ivory: '#F7F6F2',
+        bone: '#ECEBE4',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        serif: ['Playfair Display', 'serif'],
+        serif: ['"Cormorant Garamond"', 'Playfair Display', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+        display: ['Syne', 'sans-serif'],
+        mono: ['"Space Mono"', 'monospace'],
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'luxury-gradient': 'linear-gradient(to bottom, #000000, #111111)',
+      letterSpacing: {
+        'widest-xl': '0.35em',
+        'widest-2xl': '0.5em',
+      },
+      boxShadow: {
+        'luxury': '0 25px 60px -15px rgba(0, 0, 0, 0.9)',
+        'gold-glow': '0 0 35px -5px rgba(212, 175, 55, 0.25)',
       }
     },
   },

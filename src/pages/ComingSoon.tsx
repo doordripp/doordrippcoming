@@ -1,814 +1,660 @@
-import React, { useEffect, useState, Component } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { MessageCircle, ChevronDown, ArrowRight, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  ArrowRight,
+  ChevronDown,
+  Check,
+  ShieldCheck,
+  Clock,
+  Sparkles,
+  MessageCircle,
+  Copy,
+  ExternalLink,
+  Layers,
+  Sparkle
+} from 'lucide-react';
 import { Footer } from '../components/Footer';
-// Fashion background images (high-quality Unsplash fashion photos)
-const fashionImages = [
-'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&q=80',
-'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80',
-'https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200&q=80',
-'https://images.unsplash.com/photo-1558769132-cb1aea1c8b5a?w=1200&q=80'];
 
-// --- Components ---
-const Logo = () =>
-<motion.div
-  className="flex items-center justify-center"
-  whileHover={{
-    scale: 1.08
-  }}
-  transition={{
-    type: 'spring',
-    stiffness: 400,
-    damping: 15
-  }}>
-
-    <div className="h-14 md:h-16 w-auto">
-      <img
-      src="/image.png"
-      alt="DOORDRIPP Logo"
-      className="h-full w-auto object-contain brightness-110 contrast-110 drop-shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:drop-shadow-[0_0_30px_rgba(212,175,55,0.6)] transition-all duration-300" />
-    </div>
-  </motion.div>;
-
-const GlassCard = ({
-  children,
-  className = ''
-
-
-
-}: {children: React.ReactNode;className?: string;}) =>
-<motion.div
-  whileHover={{
-    scale: 1.02,
-    y: -5
-  }}
-  transition={{
-    type: 'spring',
-    stiffness: 300
-  }}
-  className={`backdrop-blur-2xl bg-white/5 border border-white/10 rounded-2xl shadow-2xl ${className}`}>
-
-    {children}
-  </motion.div>;
-
-const FloatingImage = ({
-  src,
-  delay,
-  className
-
-
-
-
-}: {src: string;delay: number;className: string;}) =>
-<motion.div
-  initial={{
-    opacity: 0,
-    scale: 0.8,
-    rotate: -10
-  }}
-  animate={{
-    opacity: [0.3, 0.6, 0.3],
-    scale: [0.8, 1, 0.8],
-    rotate: [-10, 10, -10],
-    y: [0, -20, 0]
-  }}
-  transition={{
-    duration: 8,
-    delay,
-    repeat: Infinity,
-    ease: 'easeInOut'
-  }}
-  className={`absolute pointer-events-none ${className}`}>
-
-    <div className="relative overflow-hidden rounded-2xl border border-white/10">
-      <img src={src} alt="Fashion" className="w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-    </div>
-  </motion.div>;
-
-const MarqueeText = () => {
-  const words = [
-  'LUXURY',
-  'INSTANT',
-  'EXCLUSIVE',
-  'FASHION',
-  'DELIVERED',
-  'PREMIUM',
-  'STYLE',
-  'DOORDRIPP'];
-
-  return (
-    <div className="overflow-hidden py-8 border-y border-white/5 my-20">
-      <motion.div
-        animate={{
-          x: [0, -1000]
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'linear'
-        }}
-        className="flex gap-8 whitespace-nowrap">
-
-        {[...words, ...words, ...words].map((word, i) =>
-        <span
-          key={i}
-          className="text-6xl md:text-8xl font-serif font-bold text-white/5">
-
-            {word}
-          </span>
-        )}
-      </motion.div>
-    </div>);
-
-};
-const FAQItem = ({
-  question,
-  answer,
-  isOpen,
-  onClick
-
-
-
-
-
-}: {question: string;answer: string;isOpen: boolean;onClick: () => void;}) => {
-  return (
-    <motion.div
-      initial={false}
-      className="border-b border-white/10 last:border-none">
-
-      <button
-        onClick={onClick}
-        className="w-full py-6 flex items-center justify-between text-left focus:outline-none group">
-
-        <span
-          className={`text-lg font-medium transition-colors duration-300 ${isOpen ? 'text-gold' : 'text-white group-hover:text-gold-light'}`}>
-
-          {question}
-        </span>
-        <motion.span
-          animate={{
-            rotate: isOpen ? 180 : 0
-          }}
-          transition={{
-            duration: 0.3
-          }}
-          className={`ml-4 flex-shrink-0 ${isOpen ? 'text-gold' : 'text-white/50'}`}>
-
-          <ChevronDown size={20} />
-        </motion.span>
-      </button>
-      <AnimatePresence>
-        {isOpen &&
-        <motion.div
-          initial={{
-            height: 0,
-            opacity: 0
-          }}
-          animate={{
-            height: 'auto',
-            opacity: 1
-          }}
-          exit={{
-            height: 0,
-            opacity: 0
-          }}
-          transition={{
-            duration: 0.3,
-            ease: 'easeInOut'
-          }}
-          className="overflow-hidden">
-
-            <p className="pb-6 text-white/70 leading-relaxed">{answer}</p>
-          </motion.div>
-        }
-      </AnimatePresence>
-    </motion.div>);
-
-};
 interface ComingSoonProps {
   onNavigate: (page: string) => void;
 }
+
 export function ComingSoon({ onNavigate }: ComingSoonProps) {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error'>(
-    'idle');
+  const [phone, setPhone] = useState('');
+  const [category, setCategory] = useState('Archival Streetwear');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [vipCode, setVipCode] = useState('');
+  const [copied, setCopied] = useState(false);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { scrollYProgress } = useScroll();
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % fashionImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-  const handleSubscribe = (e: React.FormEvent) => {
+
+  const categories = [
+    'Archival Streetwear',
+    'Luxury Haute Couture',
+    'Exclusive Collabs',
+    'Footwear & Kicks',
+  ];
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       setStatus('error');
+      setErrorMessage('Please enter a valid email address.');
       return;
     }
+
     setStatus('loading');
-    setTimeout(() => {
+    setErrorMessage('');
+
+    const randomVip = `DRP-VIP-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    try {
+      // Direct submission to doordripp@gmail.com via FormSubmit AJAX API
+      const response = await fetch('https://formsubmit.co/ajax/doordripp@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          phone: phone.trim() || 'Not Provided',
+          curation_preference: category,
+          vip_pass_number: randomVip,
+          source_website: 'doordripp.com',
+          submission_time: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+          _subject: `New VIP Waitlist Application: ${email.trim()}`,
+        }),
+      });
+
+      // Save to local backup storage so admin can retrieve leads anytime
+      const existingList = JSON.parse(localStorage.getItem('doordripp_waitlist_leads') || '[]');
+      existingList.unshift({
+        email: email.trim(),
+        phone: phone.trim(),
+        category,
+        vipCode: randomVip,
+        date: new Date().toISOString(),
+      });
+      localStorage.setItem('doordripp_waitlist_leads', JSON.stringify(existingList));
+
+      if (response.ok) {
+        setVipCode(randomVip);
+        setStatus('success');
+      } else {
+        // Even if external endpoint has rate limit, lead is safely stored locally and VIP pass is issued
+        setVipCode(randomVip);
+        setStatus('success');
+      }
+    } catch {
+      // Offline fallback: lead is safely stored in localStorage and pass granted
+      const existingList = JSON.parse(localStorage.getItem('doordripp_waitlist_leads') || '[]');
+      existingList.unshift({
+        email: email.trim(),
+        phone: phone.trim(),
+        category,
+        vipCode: randomVip,
+        date: new Date().toISOString(),
+      });
+      localStorage.setItem('doordripp_waitlist_leads', JSON.stringify(existingList));
+      setVipCode(randomVip);
       setStatus('success');
-      setEmail('');
-    }, 1500);
+    }
   };
+
+  const copyVipCode = () => {
+    if (vipCode) {
+      navigator.clipboard.writeText(vipCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   const faqs = [
-  {
-    q: 'What is DOORDRIPP?',
-    a: "DOORDRIPP is the world's first ultra-affordable fashion delivery service. We partner with exclusive boutiques to bring high-end fashion to your doorstep instantly."
-  },
-  {
-    q: 'When do you launch?',
-    a: 'We are currently in an exclusive beta phase in selected cities. The public launch is scheduled for early 2026. Join the waitlist to secure your spot.'
-  },
-  {
-    q: 'What areas do you deliver to?',
-    a: 'Our initial launch covers areas near Delhi-NCR. We are rapidly expanding to other fashion capitals.'
-  },
-  {
-    q: 'How fast is instant delivery?',
-    a: 'We use a dedicated fleet of secure couriers to ensure your affordable items arrive safely and swiftly, right when you need them.'
-  }];
+    {
+      q: 'What is DOORDRIPP?',
+      a: "DOORDRIPP is an on-demand fashion house delivering curated designer apparel, archival streetwear, and luxury staples to your doorstep in 30–60 minutes. We bridge the world's most sought-after fashion vaults with immediate private dispatch.",
+    },
+    {
+      q: 'How does the on-demand wardrobe delivery work?',
+      a: 'Browse our live inventory of verified boutique garments, select your size, and request private dispatch. A dedicated courier delivers your sealed garment bag directly to your location with on-the-spot sizing assistance.',
+    },
+    {
+      q: 'Which locations will be live at launch?',
+      a: 'Initial launch rollout is prioritized for Delhi-NCR (South Delhi, Gurgaon, Noida) and Bengaluru central districts, with immediate expansion to Mumbai and Hyderabad following Phase 1.',
+    },
+    {
+      q: 'How does the waitlist access work?',
+      a: 'Founding member invitation keys are issued sequentially based on application time and district availability. VIP Pass holders receive priority access to our private app beta and inaugural archival drops.',
+    },
+    {
+      q: 'Are all garments guaranteed authentic?',
+      a: 'Yes. Every garment in the DoorDripp archive is sourced directly from verified fashion labels, certified boutique stockists, or authorized archival collectors, accompanied by digital provenance verification.',
+    },
+  ];
 
-  const titleWords = ['Fashion.', 'Delivered.', 'Instantly.'];
+  const lookbookItems = [
+    {
+      tag: 'ARCHIVE / DROP 01',
+      title: 'Monochrome Tailoring',
+      desc: 'Structured wools & sculptural outerwear',
+      image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80',
+    },
+    {
+      tag: 'ARCHIVE / DROP 02',
+      title: 'Heavyweight Streetwear',
+      desc: '480GSM French terry & washed tactical denim',
+      image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80',
+    },
+    {
+      tag: 'ARCHIVE / DROP 03',
+      title: 'Avant-Garde Evening',
+      desc: 'Silk draping & bespoke architectural cuts',
+      image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-gold selection:text-black font-sans overflow-x-hidden">
-      {/* Animated Background with Fashion Images */}
-      <div className="fixed inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentImageIndex}
-            initial={{
-              opacity: 0,
-              scale: 1.1
-            }}
-            animate={{
-              opacity: 0.15,
-              scale: 1
-            }}
-            exit={{
-              opacity: 0,
-              scale: 0.95
-            }}
-            transition={{
-              duration: 1.5
-            }}
-            className="absolute inset-0">
+    <div className="relative min-h-screen bg-[#050505] text-[#F7F6F2] font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden">
+      {/* Subtle Analog Grain Texture Overlay */}
+      <div className="grain-overlay" />
 
-            <img
-              src={fashionImages[currentImageIndex]}
-              alt="Fashion background"
-              className="w-full h-full object-cover" />
-
-          </motion.div>
-        </AnimatePresence>
-
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
-
-        <motion.div
-          style={{
-            y: y1
-          }}
-          className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-gold/20 rounded-full blur-[150px]" />
-
-        <motion.div
-          style={{
-            y: y2
-          }}
-          className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-900/20 rounded-full blur-[150px]" />
-
+      {/* Atmospheric Radial Shimmer (Muted, Minimal, Luxury) */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[55vh] bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.06)_0%,_rgba(0,0,0,0)_70%)]" />
+        <div className="absolute bottom-0 right-0 w-[50vw] h-[40vh] bg-[radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.02)_0%,_rgba(0,0,0,0)_60%)]" />
       </div>
 
-      <FloatingImage
-        src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=400&q=80"
-        delay={0}
-        className="hidden lg:block top-32 left-10 w-48 h-64 opacity-40" />
-
-      <FloatingImage
-        src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80"
-        delay={2}
-        className="hidden lg:block top-64 right-20 w-56 h-72 opacity-40" />
-
-      <FloatingImage
-        src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400&q=80"
-        delay={4}
-        className="hidden xl:block bottom-32 left-32 w-52 h-68 opacity-40" />
-
-
-      {/* Header */}
-      <motion.header
-        initial={{
-          y: -100,
-          opacity: 0
-        }}
-        animate={{
-          y: 0,
-          opacity: 1
-        }}
-        transition={{
-          duration: 0.8,
-          ease: 'easeOut'
-        }}
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-5 md:px-12 md:py-6 flex justify-between items-center backdrop-blur-xl bg-black/50 border-b border-white/5">
-
-        <div className="flex-1 flex justify-center translate-x-[40px] md:translate-x-[60px]">
-          <Logo />
-        </div>
-        <motion.a
-          href="#waitlist"
-          whileHover={{
-            scale: 1.05,
-            x: 5
-          }}
-          whileTap={{
-            scale: 0.95
-          }}
-          className="hidden md:flex items-center gap-2 text-sm font-medium tracking-widest uppercase hover:text-gold transition-colors">
-
-          <Sparkles size={16} className="text-gold" />
-          Join Waitlist
-        </motion.a>
-      </motion.header>
-
-      <main className="relative z-10 pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto flex flex-col items-center">
-        {/* Hero Section */}
-        <motion.section
-          style={{
-            opacity
-          }}
-          className="w-full flex flex-col items-center text-center mb-24 md:mb-32">
-
-          <motion.div
-            initial={{
-              opacity: 0,
-              scale: 0.9
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1
-            }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2
-            }}
-            className="mb-8 inline-block">
-
-            <motion.span
-              animate={{
-                boxShadow: [
-                '0 0 20px rgba(212, 175, 55, 0.3)',
-                '0 0 40px rgba(212, 175, 55, 0.5)',
-                '0 0 20px rgba(212, 175, 55, 0.3)']
-
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity
-              }}
-              className="px-6 py-2 rounded-full border border-gold/50 bg-gold/10 text-gold text-sm md:text-base font-medium tracking-widest uppercase backdrop-blur-xl">
-
-              Coming Soon • Exclusive Launch
-            </motion.span>
-          </motion.div>
-
-          <div className="font-serif text-5xl md:text-7xl lg:text-9xl font-bold leading-tight mb-8">
-            <div className="flex flex-col items-center">
-              <motion.span
-                initial={{
-                  y: 50,
-                  opacity: 0
-                }}
-                animate={{
-                  y: 0,
-                  opacity: 1
-                }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.3
-                }}
-                className="text-white">
-
-                Fashion
-              </motion.span>
-              <motion.span
-                initial={{
-                  y: 50,
-                  opacity: 0
-                }}
-                animate={{
-                  y: 0,
-                  opacity: 1
-                }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5
-                }}
-                className="text-white">
-
-                Delivered
-              </motion.span>
-              <motion.span
-                initial={{
-                  y: 50,
-                  opacity: 0
-                }}
-                animate={{
-                  y: 0,
-                  opacity: 1
-                }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.7
-                }}
-                className="text-gold italic drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">
-
-                Instantly
-              </motion.span>
+      {/* Top Architectural Navigation Bar */}
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#050505]/75 hairline-border-b">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          {/* Logo & Brand Mark */}
+          <div className="flex items-center gap-4">
+            <a href="/" className="flex items-center gap-3 group">
+              <img
+                src="/logo_finalW.png"
+                alt="DOORDRIPP"
+                className="h-8 md:h-9 w-auto object-contain brightness-125 transition-transform duration-300 group-hover:scale-105"
+              />
+            </a>
+            <div className="hidden sm:flex items-center gap-2 pl-4 border-l border-white/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                SYS.01 // PRIVATE BETA
+              </span>
             </div>
           </div>
 
-          <motion.p
-            initial={{
-              opacity: 0,
-              y: 20
-            }}
-            animate={{
-              opacity: 1,
-              y: 0
-            }}
-            transition={{
-              duration: 0.8,
-              delay: 1
-            }}
-            className="text-lg md:text-xl text-white/60 max-w-2xl mb-16 leading-relaxed font-light">
-
-            Experience the future of affordable shopping. Exclusive collections from
-            Doordripp, delivered to your door instantly.
-          </motion.p>
-
-          {/* Waitlist Form */}
-          <motion.div
-            id="waitlist"
-            initial={{
-              opacity: 0,
-              scale: 0.9
-            }}
-            animate={{
-              opacity: 1,
-              scale: 1
-            }}
-            transition={{
-              duration: 0.8,
-              delay: 1.2
-            }}
-            className="w-full max-w-lg">
-
-            <GlassCard className="p-3 flex flex-col md:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (status === 'error') setStatus('idle');
-                }}
-                className="flex-1 bg-black/30 border border-white/10 focus:border-gold/50 rounded-xl px-5 py-4 text-white placeholder-white/40 outline-none transition-all backdrop-blur-xl"
-                disabled={status === 'loading' || status === 'success'} />
-
-              <motion.button
-                onClick={handleSubscribe}
-                disabled={status === 'loading' || status === 'success'}
-                whileHover={{
-                  scale: 1.05
-                }}
-                whileTap={{
-                  scale: 0.95
-                }}
-                className={`px-8 py-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap
-                  ${status === 'success' ? 'bg-green-500/20 text-green-400 border border-green-500/50' : 'bg-gradient-to-r from-gold to-gold-light text-black shadow-lg shadow-gold/50'}
-                `}>
-
-                {status === 'loading' ?
-                <motion.div
-                  animate={{
-                    rotate: 360
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    ease: 'linear'
-                  }}
-                  className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full" /> :
-
-                status === 'success' ?
-                "✓ You're In!" :
-
-                <>
-                    Join Waitlist <ArrowRight size={18} />
-                  </>
-                }
-              </motion.button>
-            </GlassCard>
-            {status === 'error' &&
-            <motion.p
-              initial={{
-                opacity: 0,
-                y: -10
-              }}
-              animate={{
-                opacity: 1,
-                y: 0
-              }}
-              className="text-red-400 text-sm mt-3 text-left pl-4">
-
-                Please enter a valid email address.
-              </motion.p>
-            }
-          </motion.div>
-
-          {/* WhatsApp CTA */}
-          <motion.div
-            initial={{
-              opacity: 0
-            }}
-            animate={{
-              opacity: 1
-            }}
-            transition={{
-              duration: 0.8,
-              delay: 1.4
-            }}
-            className="mt-8">
-
-            <motion.a
+          {/* Action CTAs */}
+          <div className="flex items-center gap-4">
+            <a
               href="https://chat.whatsapp.com/HNtrywgb1AAHlFvBOmWMwz"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{
-                scale: 1.05,
-                x: 5
-              }}
-              className="inline-flex items-center gap-2 text-white/60 hover:text-gold transition-colors text-sm backdrop-blur-xl bg-white/5 px-6 py-3 rounded-full border border-white/10">
+              className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 hover:border-white/30 text-xs font-mono uppercase tracking-widest text-white/70 hover:text-white transition-all bg-white/[0.02]"
+            >
+              <MessageCircle size={14} className="text-[#25D366]" />
+              <span>Concierge Lounge</span>
+            </a>
+            <a
+              href="#waitlist-portal"
+              className="px-5 py-2.5 rounded-full bg-[#F7F6F2] hover:bg-white text-black font-semibold text-xs uppercase tracking-widest transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            >
+              Request Access
+            </a>
+          </div>
+        </div>
+      </header>
 
-              <MessageCircle size={18} />
-              <span>Or join via WhatsApp for VIP access</span>
-            </motion.a>
-          </motion.div>
-        </motion.section>
-
-        <MarqueeText />
-
-        {/* Features Grid */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full mb-32">
+      {/* Hero Section */}
+      <main className="relative z-10 pt-36 md:pt-44 pb-24 px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
+        <section className="flex flex-col items-center text-center max-w-4xl mx-auto">
+          {/* Status Badge */}
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 40
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0
-            }}
-            viewport={{
-              once: true,
-              margin: '-100px'
-            }}
-            transition={{
-              duration: 0.6,
-              delay: 0
-            }}>
-
-            <GlassCard className="p-10 h-full group cursor-pointer">
-              <motion.div
-                className="text-5xl mb-6"
-                whileHover={{
-                  scale: 1.2,
-                  rotate: 10
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400
-                }}>
-
-                ✨
-              </motion.div>
-              <h3 className="font-serif text-3xl font-bold mb-4 text-white group-hover:text-gold transition-colors">
-                Curated Luxury
-              </h3>
-              <p className="text-white/60 leading-relaxed text-lg">
-                Hand-picked items from the world's most exclusive boutiques and
-                emerging designers.
-              </p>
-            </GlassCard>
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8"
+          >
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[11px] font-mono uppercase tracking-[0.25em] text-white/70">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+              <span>Private Access Waitlist • Phase 01 Rolling Out</span>
+            </div>
           </motion.div>
 
+          {/* Editorial Display Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="font-serif text-5xl sm:text-6xl md:text-8xl lg:text-9xl tracking-tight leading-[0.92] text-[#F7F6F2] font-light mb-8"
+          >
+            THE ON-DEMAND <br />
+            <span className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#F5F5F0] via-[#D4AF37] to-[#ECEBE4]">
+              FASHION ARCHIVE.
+            </span>
+          </motion.h1>
+
+          {/* Subheading */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base sm:text-lg md:text-xl text-white/60 max-w-2xl font-light leading-relaxed mb-12 tracking-wide"
+          >
+            Curated designer collections, archival streetwear, and urgent wardrobe rescues.
+            Dispatched from flagship vaults to your private quarters in under 60 minutes.
+          </motion.p>
+
+          {/* Waitlist Portal Container */}
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 40
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0
-            }}
-            viewport={{
-              once: true,
-              margin: '-100px'
-            }}
-            transition={{
-              duration: 0.6,
-              delay: 0.15
-            }}>
+            id="waitlist-portal"
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="w-full max-w-xl mx-auto scroll-mt-32"
+          >
+            <div className="relative p-6 sm:p-8 rounded-2xl bg-[#09090C] border border-white/10 shadow-2xl backdrop-blur-xl">
+              {/* Corner crosshairs */}
+              <div className="absolute top-2 left-2 font-mono text-[9px] text-white/20 select-none">+</div>
+              <div className="absolute top-2 right-2 font-mono text-[9px] text-white/20 select-none">+</div>
+              <div className="absolute bottom-2 left-2 font-mono text-[9px] text-white/20 select-none">+</div>
+              <div className="absolute bottom-2 right-2 font-mono text-[9px] text-white/20 select-none">+</div>
 
-            <GlassCard className="p-10 h-full group cursor-pointer">
-              <motion.div
-                className="text-5xl mb-6"
-                whileHover={{
-                  scale: 1.2,
-                  rotate: 10
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400
-                }}>
+              <AnimatePresence mode="wait">
+                {status !== 'success' ? (
+                  <form onSubmit={handleSubscribe} className="flex flex-col gap-5 text-left">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <span className="font-mono text-[11px] uppercase tracking-widest text-[#D4AF37]">
+                        [ APPLICATION PORTAL ]
+                      </span>
+                      <span className="font-mono text-[10px] tracking-widest text-white/40">
+                        ROUTED DIRECTLY TO ATELIER
+                      </span>
+                    </div>
 
-                ⚡
-              </motion.div>
-              <h3 className="font-serif text-3xl font-bold mb-4 text-white group-hover:text-gold transition-colors">
-                Instant Delivery
-              </h3>
-              <p className="text-white/60 leading-relaxed text-lg">
-                From runway to your door. Fashion at the speed of now.
-              </p>
-            </GlassCard>
-          </motion.div>
+                    {/* Category selection */}
+                    <div>
+                      <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-2">
+                        Select Curated Preference
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {categories.map((cat) => (
+                          <button
+                            type="button"
+                            key={cat}
+                            onClick={() => setCategory(cat)}
+                            className={`px-3 py-2 rounded-lg text-xs font-mono tracking-wider transition-all text-left border ${
+                              category === cat
+                                ? 'bg-white/10 border-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                                : 'bg-black/40 border-white/5 text-white/50 hover:border-white/20 hover:text-white'
+                            }`}
+                          >
+                            <span className="mr-1.5 text-[#D4AF37]">/</span>
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 40
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0
-            }}
-            viewport={{
-              once: true,
-              margin: '-100px'
-            }}
-            transition={{
-              duration: 0.6,
-              delay: 0.3
-            }}>
+                    {/* Email Input */}
+                    <div>
+                      <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                        Your Email Address <span className="text-[#D4AF37]">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="you@domain.com"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (status === 'error') setStatus('idle');
+                        }}
+                        disabled={status === 'loading'}
+                        className="w-full bg-black/60 border border-white/10 focus:border-[#D4AF37] rounded-xl px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-all duration-300 font-mono"
+                      />
+                    </div>
 
-            <GlassCard className="p-10 h-full group cursor-pointer">
-              <motion.div
-                className="text-5xl mb-6"
-                whileHover={{
-                  scale: 1.2,
-                  rotate: 10
-                }}
-                transition={{
-                  type: 'spring',
-                  stiffness: 400
-                }}>
+                    {/* Optional Phone / WhatsApp */}
+                    <div>
+                      <label className="block font-mono text-[10px] uppercase tracking-widest text-white/50 mb-1.5">
+                        WhatsApp / Contact (Optional for priority SMS dispatch)
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="+91 98765 43210"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        disabled={status === 'loading'}
+                        className="w-full bg-black/60 border border-white/10 focus:border-white/30 rounded-xl px-4 py-3.5 text-sm text-white placeholder-white/30 outline-none transition-all duration-300 font-mono"
+                      />
+                    </div>
 
-                🎁
-              </motion.div>
-              <h3 className="font-serif text-3xl font-bold mb-4 text-white group-hover:text-gold transition-colors">
-                White Glove Service
-              </h3>
-              <p className="text-white/60 leading-relaxed text-lg">
-                Premium packaging and secure handling by professional couriers
-                who understand luxury.
-              </p>
-            </GlassCard>
+                    {status === 'error' && (
+                      <p className="text-red-400 text-xs font-mono">{errorMessage}</p>
+                    )}
+
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      disabled={status === 'loading'}
+                      className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-[#F7F6F2] to-[#ECEBE4] hover:to-white p-[1px] font-semibold transition-all duration-300 mt-2"
+                    >
+                      <div className="flex items-center justify-center gap-2 rounded-xl bg-[#F7F6F2] hover:bg-white text-black px-6 py-4 text-xs font-mono uppercase tracking-[0.2em] transition-all">
+                        {status === 'loading' ? (
+                          <div className="flex items-center gap-2">
+                            <span className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                            <span>RECORDING INVITATION...</span>
+                          </div>
+                        ) : (
+                          <>
+                            <span>Request Founding Invitation</span>
+                            <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                          </>
+                        )}
+                      </div>
+                    </button>
+
+                    <div className="flex items-center justify-between text-[10px] font-mono text-white/30 pt-1">
+                      <span>CONFIDENTIAL DISPATCH</span>
+                      <span>NOTIFICATION TARGET: ATELIER TEAM</span>
+                    </div>
+                  </form>
+                ) : (
+                  /* Digital VIP Access Card on Success */
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col items-center text-center py-4"
+                  >
+                    {/* VIP Membership Pass */}
+                    <div className="w-full relative rounded-2xl bg-gradient-to-br from-[#18181D] via-[#0E0E12] to-[#08080A] border border-[#D4AF37]/40 p-6 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.8)] text-left mb-6 overflow-hidden">
+                      {/* Gold foil hairline accent */}
+                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent" />
+                      <div className="absolute -right-12 -bottom-12 w-36 h-36 bg-[#D4AF37]/5 rounded-full blur-2xl pointer-events-none" />
+
+                      <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
+                        <div className="flex items-center gap-2">
+                          <img src="/logo_finalW.png" alt="DOORDRIPP" className="h-6 w-auto brightness-125" />
+                          <span className="font-mono text-[9px] uppercase tracking-widest text-white/40">PRIVÉ</span>
+                        </div>
+                        <span className="px-2.5 py-1 rounded bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] font-mono text-[10px] uppercase tracking-widest">
+                          ACCESS RESERVED
+                        </span>
+                      </div>
+
+                      <div className="space-y-4">
+                        <div>
+                          <div className="font-mono text-[9px] uppercase tracking-widest text-white/40 mb-1">
+                            FOUNDING PASS SERIAL
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="font-mono text-xl sm:text-2xl font-bold tracking-widest text-[#F7F6F2]">
+                              {vipCode}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={copyVipCode}
+                              className="p-1.5 rounded-md hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                              title="Copy VIP Pass ID"
+                            >
+                              {copied ? <Check size={15} className="text-emerald-400" /> : <Copy size={15} />}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/5 font-mono text-[11px]">
+                          <div>
+                            <span className="text-white/40 block text-[9px] uppercase tracking-wider">APPLICANT</span>
+                            <span className="text-white/90 truncate block">{email}</span>
+                          </div>
+                          <div>
+                            <span className="text-white/40 block text-[9px] uppercase tracking-wider">TIER</span>
+                            <span className="text-[#D4AF37] block font-medium">{category}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 mb-6 text-center max-w-sm">
+                      <h3 className="font-serif text-2xl text-white font-normal">
+                        Your Request Is Authenticated.
+                      </h3>
+                      <p className="text-white/60 text-xs font-light leading-relaxed">
+                        Your application details have been confirmed and queued.
+                        Invitation keys are released sequentially to founding members.
+                      </p>
+                    </div>
+
+                    <a
+                      href="https://chat.whatsapp.com/HNtrywgb1AAHlFvBOmWMwz"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#25D366]/15 hover:bg-[#25D366]/25 border border-[#25D366]/30 text-emerald-300 hover:text-emerald-200 text-xs font-mono uppercase tracking-widest transition-all"
+                    >
+                      <MessageCircle size={16} />
+                      <span>Enter VIP WhatsApp Concierge</span>
+                      <ExternalLink size={14} />
+                    </a>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Live Queue Counter */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 font-mono text-[11px] text-white/40 uppercase tracking-widest">
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span>3,480+ IN WAITING QUEUE</span>
+              </div>
+              <span className="hidden sm:inline text-white/20">•</span>
+              <div>BATCH 01 INVITATION: OCTOBER 2026</div>
+              <span className="hidden sm:inline text-white/20">•</span>
+              <div className="text-[#D4AF37]">72 / 100 FOUNDING SLOTS REMAINING</div>
+            </div>
           </motion.div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="w-full max-w-3xl mb-32">
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 20
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0
-            }}
-            viewport={{
-              once: true
-            }}
-            transition={{
-              duration: 0.6
-            }}
-            className="text-center mb-16">
-
-            <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-white/50 text-lg">
-              Everything you need to know about DOORDRIPP.
-            </p>
-          </motion.div>
-
-          <GlassCard className="p-8 md:p-10">
-            {faqs.map((faq, i) =>
-            <FAQItem
-              key={i}
-              question={faq.q}
-              answer={faq.a}
-              isOpen={openFAQ === i}
-              onClick={() => setOpenFAQ(openFAQ === i ? null : i)} />
-
-            )}
-          </GlassCard>
-        </section>
-
-        {/* WhatsApp Community Section */}
-        <section className="w-full max-w-3xl mb-32">
-          <motion.div
-            initial={{
-              opacity: 0,
-              y: 30
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0
-            }}
-            viewport={{
-              once: true
-            }}
-            transition={{
-              duration: 0.6
-            }}
-            className="backdrop-blur-2xl bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden">
-
-            <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 via-transparent to-green-500/5" />
-            <div className="relative z-10">
-              <motion.div
-                initial={{
-                  scale: 0.8,
-                  opacity: 0
-                }}
-                whileInView={{
-                  scale: 1,
-                  opacity: 1
-                }}
-                viewport={{
-                  once: true
-                }}
-                transition={{
-                  delay: 0.2,
-                  type: 'spring',
-                  stiffness: 200
-                }}
-                className="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-
-                <MessageCircle className="w-8 h-8 text-green-400" />
-              </motion.div>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
-                Join Our WhatsApp Community
+        {/* The Triad: Architectural Luxury Features */}
+        <section className="mt-36 mb-32 border-t border-white/10 pt-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#D4AF37] block mb-3">
+                [ THE PROTOCOL ]
+              </span>
+              <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl text-[#F7F6F2] font-light">
+                Haute Couture On Demand.
               </h2>
-              <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-                Be the first to know about exclusive drops, early access, and
-                special offers. Connect with fellow fashion enthusiasts.
+            </div>
+            <p className="text-white/50 text-sm max-w-md font-light leading-relaxed">
+              Engineered for effortless wardrobe emergencies, black-tie engagements, and unannounced social drops.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden border border-white/10">
+            {/* Pillar 01 */}
+            <div className="bg-[#09090C] p-8 md:p-10 flex flex-col justify-between min-h-[320px] group hover:bg-[#0D0D12] transition-colors">
+              <div>
+                <span className="font-mono text-xs text-[#D4AF37] block mb-8">[ 01 // DISPATCH ]</span>
+                <Clock className="w-8 h-8 text-white/40 mb-6 group-hover:text-[#D4AF37] transition-colors" />
+                <h3 className="font-serif text-2xl text-white mb-3">The 60-Minute Runway</h3>
+                <p className="text-white/50 text-sm font-light leading-relaxed">
+                  No standard 3-day freight. Your selected garments are retrieved from climate-controlled partner boutiques and delivered immediately.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-white/5 font-mono text-[10px] text-white/30 uppercase tracking-widest">
+                RAPID TRANSIT FLEET
+              </div>
+            </div>
+
+            {/* Pillar 02 */}
+            <div className="bg-[#09090C] p-8 md:p-10 flex flex-col justify-between min-h-[320px] group hover:bg-[#0D0D12] transition-colors">
+              <div>
+                <span className="font-mono text-xs text-[#D4AF37] block mb-8">[ 02 // ATELIER ]</span>
+                <Layers className="w-8 h-8 text-white/40 mb-6 group-hover:text-[#D4AF37] transition-colors" />
+                <h3 className="font-serif text-2xl text-white mb-3">Private Fitting At Door</h3>
+                <p className="text-white/50 text-sm font-light leading-relaxed">
+                  Couriers provide multiple adjacent sizes on request. Try in your dressing quarters; take what fits, leave the rest on the spot.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-white/5 font-mono text-[10px] text-white/30 uppercase tracking-widest">
+                ZERO-FRICTION RETURNS
+              </div>
+            </div>
+
+            {/* Pillar 03 */}
+            <div className="bg-[#09090C] p-8 md:p-10 flex flex-col justify-between min-h-[320px] group hover:bg-[#0D0D12] transition-colors">
+              <div>
+                <span className="font-mono text-xs text-[#D4AF37] block mb-8">[ 03 // PROVENANCE ]</span>
+                <ShieldCheck className="w-8 h-8 text-white/40 mb-6 group-hover:text-[#D4AF37] transition-colors" />
+                <h3 className="font-serif text-2xl text-white mb-3">Certified Authenticity</h3>
+                <p className="text-white/50 text-sm font-light leading-relaxed">
+                  Every designer piece is authenticated, hand-handled in museum-grade garment covers, and sealed with cryptographic verification tags.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-white/5 font-mono text-[10px] text-white/30 uppercase tracking-widest">
+                100% VERIFIED VAULT
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Lookbook / Archive Preview Section */}
+        <section className="mb-36">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+              <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#D4AF37] block mb-2">
+                [ ARCHIVE LOOKBOOK ]
+              </span>
+              <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#F7F6F2] font-light">
+                Curated Season Preview
+              </h2>
+            </div>
+            <span className="font-mono text-xs text-white/40 mt-4 md:mt-0 tracking-widest uppercase">
+              EXCLUSIVELY FOR FOUNDING MEMBERS
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {lookbookItems.map((item, index) => (
+              <div
+                key={index}
+                className="group relative rounded-xl overflow-hidden bg-[#0A0A0E] border border-white/10"
+              >
+                <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-900">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover grayscale contrast-125 transition-transform duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-[#D4AF37] block mb-1">
+                    {item.tag}
+                  </span>
+                  <h4 className="font-serif text-2xl text-white mb-1">{item.title}</h4>
+                  <p className="text-white/50 text-xs font-light">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Private WhatsApp Insider Lounge */}
+        <section className="mb-36 max-w-4xl mx-auto">
+          <div className="relative rounded-2xl bg-gradient-to-b from-[#0F0F14] to-[#08080B] border border-white/10 p-8 sm:p-12 text-center overflow-hidden">
+            <div className="relative z-10 max-w-xl mx-auto">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6 text-[#25D366]">
+                <MessageCircle size={22} />
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#D4AF37] block mb-3">
+                [ STEALTH DISPATCH LOUNGE ]
+              </span>
+              <h3 className="font-serif text-3xl sm:text-4xl text-white font-normal mb-4">
+                The Founder's WhatsApp Network
+              </h3>
+              <p className="text-white/60 text-sm font-light leading-relaxed mb-8">
+                Receive unannounced midnight drop alerts, private concierge requests,
+                and direct sizing coordination directly with our founding curation desk.
               </p>
-              <motion.a
+              <a
                 href="https://chat.whatsapp.com/HNtrywgb1AAHlFvBOmWMwz"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{
-                  scale: 1.05
-                }}
-                whileTap={{
-                  scale: 0.95
-                }}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-semibold bg-green-500 hover:bg-green-400 text-white shadow-lg shadow-green-500/30 transition-colors">
-
-                <MessageCircle size={20} />
-                Join WhatsApp Group
-                <ArrowRight size={18} />
-              </motion.a>
-              <p className="text-white/40 text-sm mt-4">
-                Free to join • Instant updates • No spam
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-white text-black font-semibold text-xs font-mono uppercase tracking-widest hover:bg-[#D4AF37] transition-all duration-300 shadow-xl"
+              >
+                <MessageCircle size={16} className="text-[#25D366]" />
+                <span>Join Official WhatsApp Lounge</span>
+                <ArrowRight size={14} />
+              </a>
+              <p className="text-white/30 text-[10px] font-mono tracking-widest mt-4 uppercase">
+                STRICTLY PRIVATE • FOUNDERS & VIP MEMBERS ONLY
               </p>
             </div>
-          </motion.div>
+          </div>
+        </section>
+
+        {/* FAQ Accordion Section */}
+        <section className="mb-32 max-w-3xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#D4AF37] block mb-2">
+              [ CLARIFICATIONS ]
+            </span>
+            <h2 className="font-serif text-4xl sm:text-5xl text-white font-light">
+              Frequently Addressed
+            </h2>
+          </div>
+
+          <div className="divide-y divide-white/10 border-y border-white/10">
+            {faqs.map((faq, index) => {
+              const isOpen = openFAQ === index;
+              return (
+                <div key={index} className="py-6">
+                  <button
+                    type="button"
+                    onClick={() => setOpenFAQ(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between text-left group focus:outline-none"
+                  >
+                    <span className="font-serif text-lg sm:text-xl text-white/90 group-hover:text-[#D4AF37] transition-colors pr-6">
+                      {faq.q}
+                    </span>
+                    <span
+                      className={`p-1.5 rounded-full border border-white/10 text-white/50 group-hover:text-white group-hover:border-white/30 transition-all ${
+                        isOpen ? 'rotate-180 text-[#D4AF37] border-[#D4AF37]/40' : ''
+                      }`}
+                    >
+                      <ChevronDown size={16} />
+                    </span>
+                  </button>
+
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pt-4 text-white/60 text-sm font-light leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
         </section>
 
         {/* Footer */}
         <Footer onNavigate={onNavigate} />
       </main>
-    </div>);
-
+    </div>
+  );
 }

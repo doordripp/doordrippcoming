@@ -39,17 +39,14 @@ export function Footer({ onNavigate }: FooterProps) {
                 whileHover={{
                   scale: 1.02
                 }}
-                className="mb-6">
-
+                className="mb-6 flex items-center">
                 <img
-                  src="/image.png"
-                  alt="DOORDRIPP Logo"
-                  className="h-10 w-auto object-contain" />
-
+                  src="/logo_finalW.png"
+                  alt="DOORDRIPP"
+                  className="h-9 w-auto object-contain brightness-125" />
               </motion.div>
-              <p className="text-white/50 text-sm leading-relaxed mb-6">
-                India's fastest wardrobe rescue. Fashion delivered in 20–40
-                minutes.
+              <p className="text-white/40 text-xs tracking-wider uppercase font-mono leading-relaxed mb-6">
+                On-Demand Fashion Archive & Atelier Dispatch. Delivered in under 60 minutes.
               </p>
               {/* Social Icons */}
               <div className="flex gap-4">
@@ -178,31 +175,34 @@ export function Footer({ onNavigate }: FooterProps) {
               <ul className="space-y-4">
                 <li>
                   <a
-                    href="mailto:support@doordripp.com"
-                    className="text-white/50 hover:text-gold transition-colors text-sm flex items-start gap-3">
-
+                    href="mailto:doordripp@gmail.com"
+                    className="text-white/50 hover:text-champagne transition-colors text-sm flex items-start gap-3">
                     <Mail size={16} className="mt-0.5 flex-shrink-0" />
+                    <span>doordripp@gmail.com</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="mailto:support@doordripp.com"
+                    className="text-white/40 hover:text-champagne transition-colors text-xs flex items-start gap-3">
+                    <Mail size={14} className="mt-0.5 flex-shrink-0" />
                     <span>support@doordripp.com</span>
                   </a>
                 </li>
                 <li>
                   <a
                     href="tel:+919286819662"
-                    className="text-white/50 hover:text-gold transition-colors text-sm flex items-start gap-3">
-
+                    className="text-white/50 hover:text-champagne transition-colors text-sm flex items-start gap-3">
                     <Phone size={16} className="mt-0.5 flex-shrink-0" />
                     <span>+91 9286819662</span>
                   </a>
                 </li>
                 <li>
-                  <div className="text-white/50 text-sm flex items-start gap-3">
+                  <div className="text-white/40 text-xs font-mono flex items-start gap-3">
                     <MapPin size={16} className="mt-0.5 flex-shrink-0" />
                     <span>
-                      7/1, B-Block, Gokul Vihar,
-                      <br />
-                      Rohta Road, Meerut,
-                      <br />
-                      Uttar Pradesh – 250001, India
+                      7/1, B-Block, Gokul Vihar, Rohta Road<br />
+                      Meerut, UP – 250001, India
                     </span>
                   </div>
                 </li>
@@ -212,10 +212,12 @@ export function Footer({ onNavigate }: FooterProps) {
 
           {/* Bottom Bar */}
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-white/40 text-sm">
-              © {new Date().getFullYear()} Doordripp. All rights reserved.
+            <p className="text-white/40 text-xs font-mono uppercase tracking-widest">
+              © {new Date().getFullYear()} DOORDRIPP ARCHIVE. ALL RIGHTS RESERVED.
             </p>
-            <p className="text-white/30 text-xs">Made with ♥ in India</p>
+            <p className="text-white/30 text-xs font-mono tracking-widest uppercase">
+              DELHI NCR • MEERUT • BENGALURU
+            </p>
           </div>
         </div>
       </div>

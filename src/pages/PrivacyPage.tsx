@@ -38,9 +38,9 @@ export function PrivacyPage({ onNavigate }: PrivacyPageProps) {
           onClick={() => onNavigate('home')}>
 
           <img
-            src="/image.png"
-            alt="DOORDRIPP Logo"
-            className="h-10 w-auto object-contain" />
+            src="/logo_finalW.png"
+            alt="DOORDRIPP"
+            className="h-9 w-auto object-contain brightness-125" />
 
         </motion.div>
       </header>
